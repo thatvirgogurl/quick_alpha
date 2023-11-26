@@ -1,6 +1,6 @@
+import "./App.css";
 import React, { useEffect, useState } from "react";
-import "chartjs-adapter-date-fns";
-import CandlestickChart from "./CandlestickChart";
+import LiveChart from "./LiveChart.js";
 
 const WebSocketData = () => {
   const [responseData, setResponseData] = useState(null);
@@ -12,7 +12,7 @@ const WebSocketData = () => {
 
     ws.onmessage = (event) => {
       const response = JSON.parse(event.data);
-      console.log(response);
+      // console.log(response);
       setResponseData(response);
     };
 
@@ -27,34 +27,17 @@ const WebSocketData = () => {
 
   return (
     <div>
-      <h1>WebSocket Example</h1>
-      {responseData && (
-        <div>
-          <p>Received data: {JSON.stringify(responseData)}</p>
-          {/* Dynamically generate CandlestickCharts based on instruments and time intervals */}
-          {["Nifty", "Banknifty", "Finnifty"].map((instrument) =>
-            [1, 3, 5].map((timeInterval) => (
-              <CandlestickChart
-                key={`${instrument}-${timeInterval}`}
-                instrument={instrument}
-                timeInterval={timeInterval}
-                ltpData={responseData}
-              />
-            ))
-          )}
-        </div>
-      )}
+      <h1>WebSocket with CandleStickChart</h1>
+      <p>Received data: {JSON.stringify(responseData)}</p>
     </div>
   );
 };
 
-
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <WebSocketData />
-      </header>
+      <WebSocketData />
+      <LiveChart symbol={"IBM"} />
     </div>
   );
 }
